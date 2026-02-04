@@ -1,0 +1,204 @@
+/************************
+ * Variables Globales
+ **********************/
+let prestamo = null;
+let pagos = [];
+
+/*****************
+ * Local Storage
+ ****************/
+const STORAGE_KEY = 'controlPrestamos';
+
+//Guardar datos en localStorage
+function guardarDatos() {
+  const data = {
+    prestamo,
+    pagos
+  };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+// cargar datos desde localStorage
+function cargarDatos() {
+  const data = localStorage.getItem(STORAGE_KEY);
+  if (data) {
+    const parsed = JSON.parse(data);
+    prestamo = parsed.prestamo;
+    pagos = parsed.pagos || [];
+    render();
+  }
+}
+
+/****************
+ * Utilidades
+ ***************/
+
+//Formatea números con separador de miles
+function formatearPesos(valor) {
+    return valor
+        .replace(/\D/g, '')
+        .replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
+
+/****************
+ * Mensajes UX
+ ***************/
+function mostrarMensaje(texto, tipo = 'ok') {
+  const mensaje = document.getElementById('mensajeApp');
+  mensaje.textContent = texto;
+  mensaje.classList.remove('hidden', 'error');
+
+  if (tipo === 'error') {
+    mensaje.classList.add('error');
+  }
+
+  setTimeout(() => {
+    mensaje.classList.add('hidden');
+  }, 3000);
+}
+
+/*******************
+ * Render Principal
+ ******************/
+function render() {
+  const resultado = document.getElementById('resultado');
+  const seccionPagos = document.getElementById('seccionPagos');
+  const mensajeSinPrestamo = document.getElementById('mensajeSinPrestamo');
+  const btnEliminar = document.getElementById('btnEliminar');
+
+  // UX: cuando no hay prestamo
+  if(!prestamo) {
+    resultado.innerHTML = '';
+    seccionPagos.classList.add('hidden');
+    mensajeSinPrestamo.classList.remove('hidden');
+    btnEliminar.classList.add('hidden');
+    return;
+  }
+  
+  // UX: cuando si hay prestamo
+  seccionPagos.classList.remove('hidden');
+  mensajeSinPrestamo.classList.add('hidden');
+  btnEliminar.classList.remove('hidden');
+
+  const interesMensual = prestamo.capitalActual * prestamo.interes / 100;
+
+  let html = `
+    <h3>Cliente: ${prestamo.nombre}</h3>
+    <p class="capital-pendiente">
+    💼 Capital Pendiente: $${prestamo.capitalActual.toLocaleString('es-CO')}
+    </p>
+    <p><strong>Interés mensual (${prestamo.interes}%):</strong> $${interesMensual.toLocaleString('es-CO')}</p>
+    <p><strong>Fecha del prestamo:</strong> ${prestamo.fecha}</p>
+
+    <h4>Historial de pagos</h4>
+  `;
+
+  if(pagos.length === 0) {
+    html += `<p class="mensaje">Aún no se han registrado pagos para este préstamo.</p>`;
+  } else {
+    html += `<ul>`;
+    pagos.forEach(pago => {
+      html += `
+        <li>
+          Fecha del pago: ${pago.fecha} |
+          Intereses: $${pago.interes.toLocaleString('es-CO')} |
+          Capital: $${pago.capital.toLocaleString('es-CO')}
+        </li>
+      `;
+    });
+    html += `</ul>`;
+  }
+
+  resultado.innerHTML = html;
+}
+
+/***********************
+ * EVENTOS
+ ***********************/
+
+// Formateo automático del capital
+document.getElementById('capital').addEventListener('input', function () {
+  this.value = formatearPesos(this.value);
+});
+
+// Guardar préstamo
+document.getElementById('loanForm').addEventListener('submit', function (e) {
+  e.preventDefault();
+
+  prestamo = {
+    nombre: document.getElementById('nombre').value,
+    capitalInicial: Number(document.getElementById('capital').value.replace(/\./g, '')),
+    capitalActual: Number(document.getElementById('capital').value.replace(/\./g, '')),
+    interes: Number(document.getElementById('interes').value),
+    fecha: document.getElementById('fecha').value
+  };
+
+  pagos = []; // Limpiar historial al crear nuevo prestamo
+  guardarDatos();
+  mostrarMensaje('✅ Préstamo guardado correctamente');
+  render();
+});
+
+//Registrar pago
+document.getElementById('paymentForm').addEventListener('submit', function (e) {
+  e.preventDefault();
+
+  if (!prestamo) {
+    alert('⚠️ Primero registra un préstamo antes de agregar pagos');
+    return;
+  }
+
+  const pagoCapitalInput = document.getElementById('pagoCapital').value;
+  const pagoInteresInput = document.getElementById('pagoInteres').value;
+
+  const pagoCapital = pagoCapitalInput === '' ? 0 : Number(pagoCapitalInput);
+  const pagoInteres = pagoInteresInput === '' ? 0 : Number(pagoInteresInput);
+
+  if (pagoCapital === 0 && pagoInteres === 0) {
+    mostrarMensaje('⚠️ Debes ingresar un valor de pago', 'error');
+    return;
+  }
+
+  if (pagoCapital > prestamo.capitalActual) {
+    alert('❌ El pago supera el capital pendiente del préstamo');
+    return;
+  }
+
+  prestamo.capitalActual -= pagoCapital;
+
+  pagos.push({
+    fecha: new Date().toISOString().split('T')[0],
+    interes: pagoInteres,
+    capital: pagoCapital
+  });
+
+  guardarDatos();
+  mostrarMensaje('💰 Pago registrado con éxito');
+  render();
+
+  document.getElementById('pagoCapital').value = 0;
+  document.getElementById('pagoInteres').value = 0;
+
+  document.getElementById('pagoInteres').focus();
+});
+
+/*************************
+ * Eliminar préstamo
+ *************************/
+document.getElementById('btnEliminar').addEventListener('click', function () {
+  const confirmar = confirm('¿Estás seguro de eliminar este préstamo?');
+
+  if (!confirmar) return;
+
+  prestamo = null;
+  pagos = [];
+  localStorage.removeItem('controlPrestamo');
+
+  mostrarMensaje('🗑 Préstamo eliminado');
+  render();
+});
+
+/***********************
+ * INICIALIZACIÓN
+ ***********************/
+cargarDatos();
