@@ -1,0 +1,16 @@
+{
+    "name": "Control de préstamos",
+    "short_name": "Préstamos",
+    "start_url": "./index.html",
+    "display": "standalone",
+    "background_color": "#f2f2f2",
+    "theme_color": "#2ecc71",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "icons/icon.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}

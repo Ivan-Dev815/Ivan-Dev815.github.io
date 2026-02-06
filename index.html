@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Préstamos</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2ecc71">
+</head>
+<body>
+<!-- Seccion de login -->
+    <section id="loginSection">
+        <h1>🔐 Iniciar sesión</h1>
+        <p class="subtitulo">Acceso al control de préstamos</p>
+
+        <form id="loginForm">
+            <label>
+                Usuario:
+                <input type="text" id="loginUser" required>
+            </label>
+
+            <label>
+                Contraseña:
+                <input type="password" id="loginPass" required>
+            </label>
+
+            <button type="submit">Ingresar</button>
+        </form>
+    </section>
+
+<!-- Seccion de formulario de prestamos -->
+    <section id="misPrestamos">
+        <div class="header-seccion">
+        <h1>Mis Préstamos</h1>
+        <!--Boton cerrar sección-->
+        <button id="btnLogout" class="btn-cerrar">
+            Cerrar sección
+        </button>
+        </div>
+
+        <p class="subtitulo">Gestiona tus préstamos e intereses</p>
+
+        <button id="btnNuevoPrestamo" class="btn-principal">
+            ➕ Nuevo Préstamo
+        </button>
+
+        <form id="loanForm" class="hidden">
+        <label>
+            Nombre del cliente:
+            <input type="text" id="nombre" required>
+        </label>
+
+        <label>
+            Monto prestado:
+            <input type="text" id="capital" inputmode="numeric" required>
+        </label>
+
+        <label>
+            Interés (% mensual):
+            <input
+                type="number"
+                id="interes"
+                min="1"
+                max="20"
+                step="0.5"
+                placeholder="Ej: 12.5"
+                required
+            > 
+        </label>
+
+        <label>
+            Fecha del préstamo:
+            <input type="date" id="fecha" required>
+        </label>
+
+        <button type="submit">Guardar préstamo</button>
+    </form>
+
+    <h3>Préstamos activos</h3>
+
+        <div id="listaPrestamos"></div>
+    </section>
+
+<div id="seccionPagos" class="hidden">
+    <h2>Registrar pagos</h2>
+    <form id="paymentForm">
+        <label>
+            Pago a intereses:
+            <input type="number" id="pagoInteres" min="0" value="0">
+        </label>
+
+        <label>
+            Pago a capital:
+            <input type="number" id="pagoCapital" min="0" value="0">
+        </label>
+
+        <button type="submit">Registrar pago</button>
+    </form>
+</div>
+
+<p id="mensajeSinPrestamo" class="mensaje hidden">
+    Has clic sobre la persona que deseas agregar pagos.
+</p>
+
+<div id="mensajeApp" class="mensaje-app hidden"></div>
+    
+    <div id="resultado"></div>
+
+<button id="btnEliminar" class="btn-eliminar hidden">
+    🗑 Eliminar préstamo
+</button>
+
+<!-- Sección autor -->
+ <footer class="footer-app">
+    © 2026 · Creado por <strong>Iván Pimienta</strong>
+ </footer>
+    <script src="app.js" defer></script>
+</body>
+</html>
