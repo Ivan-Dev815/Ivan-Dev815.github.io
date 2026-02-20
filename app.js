@@ -23,18 +23,16 @@ function guardarDatos() {
 
 function cargarDatos() {
   const data = localStorage.getItem(STORAGE_KEY);
+  
   if (data) {
     prestamos = JSON.parse(data).map(p => ({
       ...p,
       pagos: p.pagos || []
     }));
-
-    // Seleccionar automaticamente el último prestamo
-    if (prestamos.length > 0) {
-      prestamoActivo = prestamos[prestamos.length - 1];
-    }
   }
 
+  prestamoActivo = null;
+  
   renderListaPrestamos();
   render();
 }
