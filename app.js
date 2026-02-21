@@ -1,9 +1,13 @@
 /***********************
  * Credenciales de accesos al login
  ***********************/
-const USER = 'Rosa Mata';
-const PASSWORD = '0874';
+const USERS = {
+  "Rosa Mata": "0874",
+  "Juan Mata": "2004"
+};
+
 const SESSION_KEY = 'usuarioLogueado';
+const CURRENT_USER_KEY = 'usuarioActual';
 
 /************************
  * VARIABLES GLOBALES
@@ -11,7 +15,7 @@ const SESSION_KEY = 'usuarioLogueado';
 let prestamos = [];
 let prestamoActivo = null;
 
-const STORAGE_KEY = 'controlPrestamos';
+let STORAGE_KEY = '';
 
 /*****************
  * LOCAL STORAGE
@@ -32,7 +36,7 @@ function cargarDatos() {
   }
 
   prestamoActivo = null;
-  
+
   renderListaPrestamos();
   render();
 }
@@ -293,8 +297,11 @@ const appSection = document.getElementById('misPrestamos');
 
 function verificarSesion() {
   const logueado = localStorage.getItem(SESSION_KEY);
+  const usuarioActual = localStorage.getItem(CURRENT_USER_KEY);
 
-  if (logueado === 'true') {
+  if (logueado === 'true' && usuarioActual) {
+    STORAGE_KEY = `controlPrestamos_${usuarioActual}`;
+
     loginSection.classList.add('hidden');
     appSection.classList.remove('hidden');
     cargarDatos();
@@ -307,11 +314,13 @@ function verificarSesion() {
 document.getElementById('loginForm').addEventListener('submit', function (e) {
   e.preventDefault();
 
+  // Ingresar al login
   const user = document.getElementById('loginUser').value;
   const pass = document.getElementById('loginPass').value;
 
-  if (user === USER && pass === PASSWORD) {
+  if (USERS[user] && USERS[user] === pass) {
     localStorage.setItem(SESSION_KEY, 'true');
+    localStorage.setItem(CURRENT_USER_KEY, user);
     verificarSesion();
   } else {
     alert('❌ Usuario o contraseña incorrectos');
@@ -320,6 +329,7 @@ document.getElementById('loginForm').addEventListener('submit', function (e) {
 
 document.getElementById('btnLogout').addEventListener('click', () => {
   localStorage.removeItem(SESSION_KEY);
+  localStorage.removeItem(CURRENT_USER_KEY);
   location.reload();
 });
 
