@@ -301,7 +301,15 @@ function verificarSesion() {
 
   if (logueado === 'true' && usuarioActual) {
     STORAGE_KEY = `controlPrestamos_${usuarioActual}`;
+    
+    // MIGRACIÓN AUTOMÁTICA SI EXISTEN DATOS ANTIGUOS
+    const datosAntiguos = localStorage.getItem('controlPrestamos');
+    const datosNuevoUsuario = localStorage.getItem(STORAGE_KEY);
 
+    if (datosAntiguos && !datosNuevoUsuario) {
+    localStorage.setItem(STORAGE_KEY, datosAntiguos);
+    }
+    
     loginSection.classList.add('hidden');
     appSection.classList.remove('hidden');
     cargarDatos();
