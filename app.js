@@ -74,12 +74,26 @@ function renderListaPrestamos() {
   const lista = document.getElementById('listaPrestamos');
   lista.innerHTML = '';
 
+  // Obtener texto del buscador
+  const filtro = document.getElementById('buscarPrestamo')?.value?.toLowerCase() || '';
+
   if (prestamos.length === 0) {
     lista.innerHTML = '<p>No hay préstamos registrados</p>';
     return;
   }
 
-  prestamos.forEach(p => {
+  // Filtrar préstamos por nombre
+  const prestamosFiltrados = prestamos.filter(p =>
+    p.nombre.toLowerCase().includes(filtro)
+  );
+
+  // Sin resultados
+  if (prestamosFiltrados.length === 0) {
+    lista.innerHTML = '<p>No se encontraron resultados</p>';
+    return
+  }
+
+  prestamosFiltrados.forEach(p => {
     const pagado = p.capitalActual <= 0;
 
     const div = document.createElement('div');
@@ -179,6 +193,10 @@ function render() {
  * EVENTOS
  ***********************/
 
+// Buscador
+document.getElementById('buscarPrestamo').addEventListener('input', () => {
+  renderListaPrestamos();
+});
 // Abrir formulario de prestamos con boton
 document.getElementById('btnNuevoPrestamo').addEventListener('click', () => {
   const form = document.getElementById('loanForm');

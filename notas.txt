@@ -5,3 +5,5 @@ Actualizaciones pendientes para version 2
 2) actualizar hacer un buscador dentro de la aplicación
 
 3) Poder editar los prestamos ( esto por si queremos bajar el procentaje de prestamo)
+
+4) Interes acumulativo
