@@ -1,6 +1,6 @@
 self.addEventListener('install', e => {
     e.waitUntil(
-        caches.open('prestamos-v1.5').then(cache => {
+        caches.open('prestamos-v1.5.1').then(cache => {
             return cache.addAll([
                 './',
                 './index.html',

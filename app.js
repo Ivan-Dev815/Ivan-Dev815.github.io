@@ -74,11 +74,17 @@ function renderListaPrestamos() {
   const lista = document.getElementById('listaPrestamos');
   lista.innerHTML = '';
 
+  const buscador = document.getElementById('buscarPrestamo');
+
   // Obtener texto del buscador
   const filtro = document.getElementById('buscarPrestamo')?.value?.toLowerCase() || '';
 
   if (prestamos.length === 0) {
-    lista.innerHTML = '<p>No hay préstamos registrados</p>';
+    lista.innerHTML = '<p>No hay préstamos registrados.<br>Agrega tu primer préstamo para comenzar.</p>';
+
+    // Ocultar buscador si no hay datos
+    buscador.classList.add('hidden');
+
     return;
   }
 
@@ -92,6 +98,8 @@ function renderListaPrestamos() {
     lista.innerHTML = '<p>No se encontraron resultados</p>';
     return
   }
+  // Mostrar buscador si hay datos
+  buscador.classList.remove('hidden');
 
   prestamosFiltrados.forEach(p => {
     const pagado = p.capitalActual <= 0;
@@ -146,8 +154,14 @@ function render() {
   if (!prestamoActivo) {
     resultado.innerHTML = '';
     seccionPagos.classList.add('hidden');
-    mensajeSinPrestamo.classList.remove('hidden');
     btnEliminar.classList.add('hidden');
+
+    if (prestamos.length > 0) {
+      mensajeSinPrestamo.classList.remove('hidden');
+    } else {
+      mensajeSinPrestamo.classList.add('hidden');
+    }
+    
     return;
   }
 
