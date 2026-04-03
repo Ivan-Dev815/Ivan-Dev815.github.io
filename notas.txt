@@ -1,10 +1,7 @@
 Actualizaciones pendientes para version 2
 
-1) Hacer que cuando abra la aplicación todas las cartas esten cerradas, 
-    ya que a día de hoy cuando se abre la aplicación siempre esta abierta la ultima carta de la aplicación
+1) Crear facturas
 
-2) Crear nuevo usuario para Juan Mata
+2) actualizar hacer un buscador dentro de la aplicación
 
-3) Crear facturas
-
-4) Cambiar el icono
+3) Poder editar los prestamos ( esto por si queremos bajar el procentaje de prestamo)
