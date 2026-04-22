@@ -30,7 +30,7 @@
     </section>
 
 <!-- Seccion de formulario de prestamos -->
-    <section id="misPrestamos">
+    <section id="misPrestamos" class="hidden">
         <div class="header-seccion">
         <h1>Mis Préstamos</h1>
         <!--Boton cerrar sección-->
@@ -119,8 +119,30 @@
 
 <!-- Sección autor -->
  <footer class="footer-app">
-    © 2026 · Creado por <strong>Iván Pimienta</strong> · v1.5.1
+    © 2026 · Creado por <strong>Iván Pimienta</strong> · v1.6.0
  </footer>
     <script src="app.js" defer></script>
+
+<!-- Modal actualización -->
+ <div id="modalUpdate" class="modal hidden">
+    <div class="modal-content">
+
+        <span id="cerrarModal" class="close">&times;</span>
+
+        <h2> Nueva actualización en camino </h2>
+
+        <p>
+            Muy pronto podrás guardar tus préstamos en la numbe
+            y acceder desde cualquier dispositivo.
+        </p>
+
+        <p>
+            Esto evitará la perdida de información y mejorara tu experiencia.
+        </p>
+
+        <button id="btnEntendido">Entendido</button>
+
+    </div>
+ </div>
 </body>
 </html>

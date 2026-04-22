@@ -345,6 +345,7 @@ function verificarSesion() {
     loginSection.classList.add('hidden');
     appSection.classList.remove('hidden');
     cargarDatos();
+    mostrarModalSiEsNecesario();
   } else {
     loginSection.classList.remove('hidden');
     appSection.classList.add('hidden');
@@ -379,6 +380,29 @@ document.getElementById('btnLogout').addEventListener('click', () => {
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js');
 }
+
+/***********************
+ * MODAL ACTUALIZACIÓN
+ ***********************/
+const MODAL_KEY = 'update_v1.6_visto';
+
+function mostrarModalSiEsNecesario() {
+  const yaVisto = localStorage.getItem(MODAL_KEY);
+
+  if (!yaVisto) {
+    document.getElementById('modalUpdate').classList.remove('hidden');
+  }
+}
+
+// Cerrar modal
+function cerrarModal() {
+  document.getElementById('modalUpdate').classList.add('hidden');
+  localStorage.setItem(MODAL_KEY, 'true');
+}
+
+// Eventos
+document.getElementById('cerrarModal').addEventListener('click', cerrarModal);
+document.getElementById('btnEntendido').addEventListener('click', cerrarModal);
 
 /***********************
  * INICIALIZACIÓN
