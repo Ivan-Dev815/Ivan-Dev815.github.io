@@ -3,7 +3,8 @@
  ***********************/
 const USERS = {
   "Rosa Mata": "0874",
-  "Juan Mata": "2004"
+  "Juan Mata": "2004",
+  "Alex Ruiz": "1234"
 };
 
 const SESSION_KEY = 'usuarioLogueado';
