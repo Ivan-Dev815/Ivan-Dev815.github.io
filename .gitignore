@@ -1,2 +1,9 @@
 .DS_Store
 *.dmg
+
+# Archivos personales
+notas.txt
+
+# Claude code
+CLAUDE.md
+.claude/

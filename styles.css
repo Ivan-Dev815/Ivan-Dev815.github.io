@@ -287,3 +287,137 @@ input, select {
 .hidden {
     display: none;
 }
+
+/* Vista detalle */
+#detallePrestamo {
+    max-width: 800px;
+    margin: auto;
+}
+
+.btn-volver {
+    width: auto;
+    padding: 10px 18px;
+    margin-bottom: 20px;
+    background: #3498db;
+}
+
+.btn-volver:hover {
+    background: #2980b9;
+}
+
+/* Vista detalle */
+.detalle-header h2{
+    margin-bottom: 20px;
+}
+
+.capital-box{
+    background: #2ecc71;
+    color: white;
+    border-radius: 12px;
+    padding: 18px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.capital-box span{
+  display: block;
+  opacity: .9;
+  font-size: .9rem;
+}
+
+.capital-box h1{
+    margin: 10px 0 0;
+    font-size: 2rem;
+}
+
+.detalle-info{
+    line-height: 1.9;
+}
+
+.detalle-info p{
+    margin: 6px 0;
+}
+
+.detalle-header hr{
+    margin: 25px 0;
+    border: none;
+    border-top: 1px solid #ddd;
+}
+
+/* Historial de pagos */
+.historial-pagos {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.pago-card {
+    background:white;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0,.08 );
+    border-left: 5px solid #2ecc71;
+}
+
+.pago-fecha{
+    font-weight: bold;
+    margin-bottom: 12px;
+    color: #555;
+}
+
+.pago-datos{
+    display: flex;
+    justify-content: space-between;
+}
+
+.pago-datos small{
+    color:#888;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.pago-datos h4{
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+/* Resumen financiero */
+.resumen-financiero {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 25px 0;
+}
+
+.card-resumen {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, .08);
+    border-left: 5px solid #2ecc71;
+}
+
+.card-resumen span{
+    color: #777;
+    font-size: .9rem;
+}
+
+.card-resumen h3{
+    margin-top: 8px;
+    margin-bottom: 0;
+    font-size: 1.6rem;
+}
+
+/* Lista de mensaje de actualización */
+.lista-update {
+    text-align: left;
+    margin: 20px 0;
+    padding-left: 20px;
+}
+
+.lista-update li{
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+    
+    

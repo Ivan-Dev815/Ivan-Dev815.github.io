@@ -131,17 +131,22 @@ function renderListaPrestamos() {
  * SELECCIONAR PRÉSTAMO
  *******************/
 function seleccionarPrestamo(id) {
-  // Si hago clic en el mismo préstamo activo -> deseleccionar
-  if (prestamoActivo && prestamoActivo.id === id) {
-    prestamoActivo = null;
-  } else {
-    // Si es otro préstamo -> seleccionarlo
-    prestamoActivo = prestamos.find(p => p.id === id);
-  }
-  
-  renderListaPrestamos();
+  prestamoActivo = prestamos.find(p => p.id === id);
+
+  document.getElementById('misPrestamos').classList.add('hidden');
+  document.getElementById('detallePrestamo').classList.remove('hidden');
+
   render();
 }
+
+document.getElementById('btnVolver').addEventListener('click', () => {
+  prestamoActivo = null;
+
+  document.getElementById('detallePrestamo').classList.add('hidden');
+  document.getElementById('misPrestamos').classList.remove('hidden');
+
+  renderListaPrestamos();
+});  
 
 /*******************
  * RENDER PRINCIPAL
@@ -149,56 +154,94 @@ function seleccionarPrestamo(id) {
 function render() {
   const resultado = document.getElementById('resultado');
   const seccionPagos = document.getElementById('seccionPagos');
-  const mensajeSinPrestamo = document.getElementById('mensajeSinPrestamo');
   const btnEliminar = document.getElementById('btnEliminar');
 
   if (!prestamoActivo) {
     resultado.innerHTML = '';
     seccionPagos.classList.add('hidden');
     btnEliminar.classList.add('hidden');
-
-    if (prestamos.length > 0) {
-      mensajeSinPrestamo.classList.remove('hidden');
-    } else {
-      mensajeSinPrestamo.classList.add('hidden');
-    }
     
     return;
   }
 
   seccionPagos.classList.remove('hidden');
-  mensajeSinPrestamo.classList.add('hidden');
   btnEliminar.classList.remove('hidden');
 
   const interesMensual = prestamoActivo.capitalActual * prestamoActivo.interes / 100;
 
-  let html = `
-    <h3>Cliente: ${prestamoActivo.nombre}</h3>
-    <p class="capital-pendiente">
-      💼 Capital Pendiente: $${prestamoActivo.capitalActual.toLocaleString('es-CO')}
-    </p>
-    <p><strong>Interés mensual (${prestamoActivo.interes}%):</strong> 
-      $${interesMensual.toLocaleString('es-CO')}
-    </p>
-    <p><strong>Fecha del préstamo:</strong> ${prestamoActivo.fecha}</p>
+  // Renderizar resumen del préstamo
+  const capitalRecuperado = prestamoActivo.capitalInicial - prestamoActivo.capitalActual;
+  const interesesRecibidos = prestamoActivo.pagos.reduce((total, pago) => total + pago.interes, 0);
 
-    <h4>Historial de pagos</h4>
+  let html = `
+  <div class="detalle-header">
+    <h2>👤 ${prestamoActivo.nombre}</h2>
+    <div class="capital-box">
+      <span>Capital pendiente:</span>
+      <h1>$${prestamoActivo.capitalActual.toLocaleString('es-CO')}</h1>
+    </div>
+
+    <div class="detalle-info">
+      <p>📈 Interés mensual: 
+      <strong>${prestamoActivo.interes}%</strong>
+      </p>
+      <p>💵 Valor interés:
+      <strong>$${interesMensual.toLocaleString('es-CO')}</strong>
+      </p>
+      <p>📅 Fecha del préstamo:
+      <strong>${prestamoActivo.fecha}</strong>
+      </p>
+    </div>
+
+    <div class="resumen-financiero">
+      <div class="card-resumen">
+        <span>Total prestado</span>
+        <h3>$${prestamoActivo.capitalInicial.toLocaleString('es-CO')}</h3>
+      </div>
+
+      <div class="card-resumen">
+        <span>Capital recuperado</span>
+        <h3>$${capitalRecuperado.toLocaleString('es-CO')}</h3>
+      </div>
+
+      <div class="card-resumen">
+        <span>Intereses cobrados</span>
+        <h3>$${interesesRecibidos.toLocaleString('es-CO')}</h3>
+      </div>
+    </div>
+
+    <hr>
+    <h3>Historial de Pagos</h3>
+  </div>
   `;
 
   if (prestamoActivo.pagos.length === 0) {
     html += `<p class="mensaje">Aún no se han registrado pagos.</p>`;
   } else {
-    html += '<ul>';
+
+    html += `<div class="historial-pagos">`;
     prestamoActivo.pagos.forEach(pago => {
       html += `
-        <li>
-          Fecha: ${pago.fecha} |
-          Interés: $${pago.interes.toLocaleString('es-CO')} |
-          Capital: $${pago.capital.toLocaleString('es-CO')}
-        </li>
+        <div class="pago-card">
+          <div class="pago-fecha">
+            📅 ${pago.fecha}
+          </div>
+
+          <div class="pago-datos">
+            <div>
+              <small>Capital</small>
+              <h4>$${pago.capital.toLocaleString('es-CO')}</h4>
+            </div>
+
+            <div>
+              <small>Interés</small>
+              <h4>$${pago.interes.toLocaleString('es-CO')}</h4>
+            </div>
+          </div>
+        </div>
       `;
     });
-    html += '</ul>';
+    html += `</div>`;
   }
 
   resultado.innerHTML = html;
@@ -385,7 +428,7 @@ if ('serviceWorker' in navigator) {
 /***********************
  * MODAL ACTUALIZACIÓN
  ***********************/
-const MODAL_KEY = 'update_v1.6_visto';
+const MODAL_KEY = 'update_v1.7_visto';
 
 function mostrarModalSiEsNecesario() {
   const yaVisto = localStorage.getItem(MODAL_KEY);
